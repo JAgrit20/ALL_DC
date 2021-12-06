@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DoubtConnect Admin Site</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+  <script>
+    $(function() {
+      function createPhase2Item(key, teacher) {
+	const hKey = `h-p2--${key}`
+	const cKey = `c-p2--${key}`
+      	$('#phase2-accordion').append(
+          $('<div/>', {
+            'class': 'card'
+	  }).append(
+            $('<div/>', {
+	      id: hKey,
+              'class': 'card-header' 
+	    }).append(
+              $('<h4/>').text(`${teacher.firstname} ${teacher.lastname}`)
+	        .attr('data-toggle', 'collapse')
+		.attr('data-target', `#${cKey}`)
+		.attr('aria-controls', cKey)
+		.attr('aria-expanded', false)
+	    )
+	  ).append(
+	    $('<div/>', {
+              id: cKey,
+	      'class': 'collapse'
+	    }).attr('aria-labelledby', hKey)
+	      .data('parent', '#phase2-accordion').append(
+              $('<div/>', {
+                'class': 'card-body'
+	      }).append(
+                $('<div/>', {
+                  'class': 'container-fluid'
+		}).append(
+                  $('<div/>', {
+                    'class': 'row'
+		  }).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 font-weight-bold'
+		    }).text(key)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(teacher.Email)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(teacher.phone)
+		  )
+		)
+	      )
+	    )
+	  )
+	)
+      }
+
+      function createRequestEditItem(key, teacher) {
+	const hKey = `h-re--${key}`
+	const cKey = `c-re--${key}`
+      	$('#request-edits-accordion').append(
+          $('<div/>', {
+            'class': 'card'
+	  }).append(
+            $('<div/>', {
+	      id: hKey,
+              'class': 'card-header' 
+	    }).append(
+              $('<h4/>').text(`${teacher.firstname} ${teacher.lastname}`)
+	        .attr('data-toggle', 'collapse')
+		.attr('data-target', `#${cKey}`)
+		.attr('aria-controls', cKey)
+		.attr('aria-expanded', false)
+	    )
+	  ).append(
+	    $('<div/>', {
+              id: cKey,
+	      'class': 'collapse'
+	    }).attr('aria-labelledby', hKey)
+	      .data('parent', '#phase2-accordion').append(
+              $('<div/>', {
+                'class': 'card-body'
+	      }).append(
+                $('<div/>', {
+                  'class': 'container-fluid'
+		}).append(
+                  $('<div/>', {
+                    'class': 'row'
+		  }).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 font-weight-bold'
+		    }).text(key)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(teacher.Email)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(teacher.phone)
+		  )
+		)
+	      )
+	    )
+	  )
+	)
+      }
+
+      function createStudentHelpItem(key, student, queries) {
+	      const hKey = `h-sh--${key}`
+	      const cKey = `c-sh--${key}`
+	      if (!student) return
+
+	      const row = $('<div/>')
+	      Object.keys(queries).forEach((qKey, i) => {
+		      row.append($('<p/>').addClass('d-block text-black m-3').text(`Query ${i+1}: ${queries[qKey].query}`))
+		      queries[qKey].queryfile && row.append(`<a href="${queries[qKey].queryfile}" target="_blank">Click here to view file</a>`)
+	      })
+      	$('#help-s-accordion').append(
+          $('<div/>', {
+            'class': 'card'
+	  }).append(
+            $('<div/>', {
+	      id: hKey,
+              'class': 'card-header' 
+	    }).append(
+              $('<h4/>').text(`${student.Name}`)
+	        .attr('data-toggle', 'collapse')
+		.attr('data-target', `#${cKey}`)
+		.attr('aria-controls', cKey)
+		.attr('aria-expanded', false)
+	    )
+	  ).append(
+	    $('<div/>', {
+              id: cKey,
+	      'class': 'collapse'
+	    }).attr('aria-labelledby', hKey)
+	      .data('parent', '#phase2-accordion').append(
+              $('<div/>', {
+                'class': 'card-body'
+	      }).append(
+                $('<div/>', {
+                  'class': 'container-fluid'
+		}).append(
+                  $('<div/>', {
+                    'class': 'row'
+		  }).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 font-weight-bold'
+		    }).text(key)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(student.Email)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(student.phonenumber)
+		  )
+		).append(row)
+	      )
+	    )
+	  )
+	)
+      }
+
+
+      function createStudentTicketItem(key, student, queries) {
+	      const hKey = `h-st--${key}`
+	      const cKey = `c-st--${key}`
+	      if (!student) return
+
+	      const row = $('<div/>')
+	      Object.keys(queries).forEach((qKey, i) => {
+		      row.append($('<p/>').addClass('d-block text-black m-3').text(`Query ${i+1}: ${queries[qKey].exp}`))
+		      queries[qKey].file && row.append(`<a href="${queries[qKey].file}" target="_blank">Click here to view file</a>`)
+	      })
+      	$('#tickets-s-accordion').append(
+          $('<div/>', {
+            'class': 'card'
+	  }).append(
+            $('<div/>', {
+	      id: hKey,
+              'class': 'card-header' 
+	    }).append(
+              $('<h4/>').text(`${student.Name}`)
+	        .attr('data-toggle', 'collapse')
+		.attr('data-target', `#${cKey}`)
+		.attr('aria-controls', cKey)
+		.attr('aria-expanded', false)
+	    )
+	  ).append(
+	    $('<div/>', {
+              id: cKey,
+	      'class': 'collapse'
+	    }).attr('aria-labelledby', hKey)
+	      .data('parent', '#phase2-accordion').append(
+              $('<div/>', {
+                'class': 'card-body'
+	      }).append(
+                $('<div/>', {
+                  'class': 'container-fluid'
+		}).append(
+                  $('<div/>', {
+                    'class': 'row'
+		  }).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 font-weight-bold'
+		    }).text(key)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(student.Email)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(student.phonenumber)
+		  )
+		).append(row)
+	      )
+	    )
+	  )
+	)
+      }
+
+      function createTeacherHelpItem(key, teacher, queries) {
+	      const hKey = `h-th--${key}`
+	      const cKey = `c-th--${key}`
+	      if (!teacher) return
+
+	      const row = $('<div/>')
+	      Object.keys(queries).forEach((qKey, i) => {
+		      row.append($('<p/>').addClass('d-block text-black m-3').text(`Query ${i+1}: ${queries[qKey].query}`))
+			queries[qKey].queryfile && row.append($('<a/>').attr('href', queries[qKey].queryfile).attr('target', '_blank').text('Click here to view file'))
+	      })
+      	$('#help-t-accordion').append(
+          $('<div/>', {
+            'class': 'card'
+	  }).append(
+            $('<div/>', {
+	      id: hKey,
+              'class': 'card-header' 
+	    }).append(
+		    $('<h4/>').text(`${teacher.Name}`)
+	        .attr('data-toggle', 'collapse')
+		.attr('data-target', `#${cKey}`)
+		.attr('aria-controls', cKey)
+		.attr('aria-expanded', false)
+	    )
+	  ).append(
+	    $('<div/>', {
+              id: cKey,
+	      'class': 'collapse'
+	    }).attr('aria-labelledby', hKey)
+	      .data('parent', '#phase2-accordion').append(
+              $('<div/>', {
+                'class': 'card-body'
+	      }).append(
+                $('<div/>', {
+                  'class': 'container-fluid'
+		}).append(
+                  $('<div/>', {
+                    'class': 'row'
+		  }).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 font-weight-bold'
+		    }).text(key)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(teacher.Email)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(teacher.Phone)
+		  )
+		).append(row)
+	      )
+	    )
+	  )
+	)
+      }
+
+      function createTeacherTicketItem(key, teacher, queries) {
+	      const hKey = `h-tt--${key}`
+	      const cKey = `c-tt--${key}`
+	      if (!teacher) return
+
+	      const row = $('<div/>')
+	      Object.keys(queries).forEach((qKey, i) => {
+		      row.append($('<p/>').addClass('d-block text-black m-3').text(`Query ${i+1}: ${queries[qKey].query}`))
+			queries[qKey].queryfile && row.append($('<a/>').attr('href', queries[qKey].queryfile).attr('target', '_blank').text('Click here to view file'))
+	      })
+      	$('#tickets-t-accordion').append(
+          $('<div/>', {
+            'class': 'card'
+	  }).append(
+            $('<div/>', {
+	      id: hKey,
+              'class': 'card-header' 
+	    }).append(
+		    $('<h4/>').text(`${teacher.Name}`)
+	        .attr('data-toggle', 'collapse')
+		.attr('data-target', `#${cKey}`)
+		.attr('aria-controls', cKey)
+		.attr('aria-expanded', false)
+	    )
+	  ).append(
+	    $('<div/>', {
+              id: cKey,
+	      'class': 'collapse'
+	    }).attr('aria-labelledby', hKey)
+	      .data('parent', '#phase2-accordion').append(
+              $('<div/>', {
+                'class': 'card-body'
+	      }).append(
+                $('<div/>', {
+                  'class': 'container-fluid'
+		}).append(
+                  $('<div/>', {
+                    'class': 'row'
+		  }).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 font-weight-bold'
+		    }).text(key)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(teacher.Email)
+		  ).append(
+                    $('<h6/>', {
+                      'class': 'text-muted col-12 col-sm-6'
+		    }).text(teacher.Phone)
+		  )
+		).append(row)
+	      )
+	    )
+	  )
+	)
+      }
+
+	function createUnsolvedDoubtsData(unsolvedDoubts) {
+		Object.keys(unsolvedDoubts).forEach(function(date) {
+			$('#unsolved-d-content').append(
+				$('<div/>').append(
+					$('<strong/>').text(`${date}: `)
+				).append(
+					$('<span />', {
+						style: 'color: blue;'
+					}).text(unsolvedDoubts[date])
+				)
+			)
+		})
+	}
+
+      $.get('/api/phase2', function(data, status) {
+        if (status !== "success")
+	  return
+
+	Object.keys(data).forEach(function(key) {
+          createPhase2Item(key, data[key])
+	})
+      })
+
+      $.get('/api/help-s', function(data, status) {
+        if (status !== "success")
+	  return
+
+	Object.keys(data).forEach(function(key) {
+		$.get(`/api/student/${key}`, function(student, status2) {
+			if (status2 !== "success")
+				return
+
+			createStudentHelpItem(key, student, data[key])
+		})
+	})
+      })
+	
+      $('#type').change(function() {
+        $('.my-tab').hide()
+        $(this.value).show()
+      })
+      $('.my-tab').hide()
+      $('#phase2').show()
+	
+      $.get('/api/help-t', function(data, status) {
+        if (status !== 'success') return
+  
+	      Object.keys(data).forEach(function(key) {
+			    $.get(`/api/teacher/${key}`, function(teacher, status2) {
+				    if (status2 !== 'success')
+					    return
+
+				    createTeacherHelpItem(key, teacher, data[key])
+			    })
+		    })
+	    })
+
+	$.get('/api/ticket-t', function(data, status) {
+		if (status !== 'success') return
+
+		Object.keys(data).forEach(function(key) {
+			$.get(`/api/teacher/${key}`, function(teacher, status2) {
+				if (status2 !== 'success') return
+
+				createTeacherTicketItem(key, teacher, data[key])
+			})
+		})
+	})
+
+	
+	$.get('/api/ticket-s', function(data, status) {
+		if (status !== 'success') return
+
+		Object.keys(data).forEach(function(key) {
+			$.get(`/api/student/${key}`, function(student, status2) {
+				if (status2 !== 'success') return
+
+				createStudentTicketItem(key, student, data[key])
+			})
+		})
+	})
+
+	$.get('/api/request-edits', function(data, status) {
+		if (status !== 'success') return
+
+		Object.keys(data).forEach(function(key) {
+			createRequestEditItem(key, data[key])
+		})
+	})
+
+	$.get('/api/unsolved-d', function(data, status) {
+		if (status !== 'success') return
+
+		const unsolvedDoubts = {}
+		data.forEach(function(datum) {
+			Object.keys(datum).forEach(key => {
+				if (datum[key].date in unsolvedDoubts)
+					unsolvedDoubts[datum[key].date]++
+				else
+					unsolvedDoubts[datum[key].date] = 1
+			})
+		})
+		createUnsolvedDoubtsData(unsolvedDoubts)
+	})
+    })
+  </script>
+</head>
+<body>
+  <h1 class="text-center font-weight-bold">Dashboard</h1>
+  <label for="type">Select an option: </label>
+  <select id="type" name="type">
+    <option value="#phase2">View teachers in phase 2</option>
+    <option value="#help-s">View Students seeking for help</option>
+    <option value="#help-t">View Teachers seeking for help</option>
+    <option value="#tickets-s">View tickets raised by students</option>
+    <option value="#tickets-t">View tickets raised by teachers</option>
+    <option value="#request-edits">View Teachers requesting edits</option>
+    <option value="#unsolved-d">View Unsolved Doubts by date</option>
+  </select>
+  <div class="root m-4 p-2 pb-5">
+    <div id="phase2" class="my-tab">
+      <div id="phase2-accordion" class="accordion"></div>
+    </div>
+    <div id="help-s" class="my-tab">
+      <div id="help-s-accordion" class="accordion"></div>
+    </div>
+    <div id="help-t" class="my-tab">
+      <div id="help-t-accordion" class="accordion"></div>
+    </div>
+    <div id="tickets-s" class="my-tab">
+      <div id="tickets-s-accordion" class="accordion"></div>
+    </div>
+    <div id="tickets-t" class="my-tab">
+      <div id="tickets-t-accordion" class="accordion"></div>
+    </div>
+    <div id="request-edits" class="my-tab">
+      <div id="request-edits-accordion" class="accordion"></div>
+    </div>
+    <div id="unsolved-d" class="my-tab">
+      <div id="unsolved-d-content"></div>
+    </div>
+  </div>
+</body>
+</html>
