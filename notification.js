@@ -22,7 +22,7 @@ var otherAppConfig = {credential: admin.credential.cert(require("/var/www/servic
 var otherApp = admin.initializeApp(otherAppConfig, 'other');
 var db = otherApp.database();
 var sdb = defaultApp.database()
-console.log(defaultApp.name)
+console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',defaultApp.name)
 const cors = require('cors')
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -41,7 +41,7 @@ app.post('/updatentoken', function(request, response){
  // response.header("Access-Control-Allow-Origin", "*");
   if(uidash.get(request.body.uid)== undefined | uidash.get(request.body.uid)!=request.body.token){
   uidash.set(request.body.uid,request.body.token);
-  console.log(uidash)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',uidash)
   response.json({ token: 'updated' });   // echo the result back
   }
 });
@@ -54,56 +54,56 @@ app.post('/payment-r', function(request, response){
   console.table(data)
   var signature = request.body.signature
   var secretKey =  config.secretKey
-  console.log(secretKey)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',secretKey)
   signatureData = "";
   signatureData = data["orderId"] + data["orderAmount"] + data["referenceId"] + 
                   data["txStatus"] + data["paymentMode"] + data["txMsg"] + data["txTime"];
-                  console.log(signatureData)
+                  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',signatureData)
   var derivedSignature = crypto.createHmac('sha256',secretKey).update(signatureData).digest('base64');
-  console.log(derivedSignature)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',derivedSignature)
   
   if(derivedSignature !== signature || data["txStatus"]==="FAILED"){
     response.redirect("https://webapp.doubtconnect.in/student/payment/failure")
-     console.log("not-success")
+     console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"not-success")
   }
   else if(data["txStatus"]==="CANCELLED"){
     response.redirect("https://webapp.doubtconnect.in/student/")
-    console.log("cancelled")
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"cancelled")
   }
   else
   {
     var payment_url = "https://webapp.doubtconnect.in/student/payment/success/" + data["orderAmount"]
     response.redirect(payment_url)
-      console.log("success")
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"success")
   }
   
 });
 
 app.post('/payment-i', function(request, response){
   var data = request.body
-  console.log(data)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data)
   var signature = request.body.signature
   var secretKey =  config.secretKey
-  console.log(secretKey)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',secretKey)
   signatureData = "";
   signatureData = data["orderId"] + data["orderAmount"] + data["referenceId"] + 
                   data["txStatus"] + data["paymentMode"] + data["txMsg"] + data["txTime"];
   var derivedSignature = crypto.createHmac('sha256',secretKey).update(signatureData).digest('base64');
-  console.log(derivedSignature)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',derivedSignature)
   if(derivedSignature !== signature){
      response.send("there was a missmatch in signatures genereated and received")
-     console.log("not-success")
+     console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"not-success")
   }
   else
   {
       response.send("payment success")
-      console.log("success")
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"success")
   }
 });
 
 
 app.post('/payment-get', function(request, response){
-  console.log(request.body);
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',request.body);
 var  payemnt_info = request.body;
 });
 
@@ -112,16 +112,16 @@ app.post('/register-tags', function(request, response){
   var uid = request.body.uid;
   var success = false
   tag = tag.replace(/[.]/g,'');
-  console.log(uid," ", tag)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',uid," ", tag)
   const reff = db.ref('Tags/');
   var tokens = tag.split("|")
-  console.log(tokens)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',tokens)
   tokens.forEach(function(value){
     reff.child(value).push(uid, (error) => {
       if (error) {
-        console.log('Data could not be saved.' + error);
+        console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Data could not be saved.' + error);
       } else {
-        console.log('Data saved successfully.');
+        console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Data saved successfully.');
         success = true
       }
     });
@@ -142,7 +142,7 @@ app.post('/sendfcm-i', function(req, res) {
   var topic = req.body.topic;
   var uidstudent = req.body.sname;
   request.set(session_id,req.body.tokens) 
-  console.log("kk0",request)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"kk0",request)
   collector[session_id] = [];
       collector[session_id][0] = {acrc: 0};
       collector[session_id][0]["phase"]="one";
@@ -158,32 +158,37 @@ app.post('/sendfcm-i', function(req, res) {
       collector[session_id][0]["board"]=req.body.board;
       collector[session_id][0]["chapter"]=req.body.chapter;
       collector[session_id][0]["topic"]=req.body.topic;
-      console.log(collector[session_id][0])
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"collector=>>",collector[session_id])
+      console.log("collector")
       or++;
 
     db.ref("Users").orderByChild("status").equalTo("online").once("value", function(snapshot) {
         snapshot.forEach(function(data) {
-            console.log(data.key)
+            console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data.key)
             online.push(data.key)
+            console.log("online is here")
+            console.log(online,"online")
         })
     });
    // var request1 = "cbse-12-physics-1.2 refraction".replace(/[.]/g,'')
     var request1 = board+"-"+grade+"-"+subject+"-"+lang+"-"+chapter+"-"+topic
     request1 = request1.replace(/[.]/g,'')
     db.ref("Tags").child(request1).once("value", function(snapshot) {
+      console.log("snapshot is here",snapshot.val())
         snapshot.forEach(function(data) {
-            console.log(data.val())
+            console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data.val())
+            console.log("data is here",data.val())
             if(online.includes(data.val()))
             {
               if(!list.includes(uidash.get(data.val()))){
-                console.log("first phase uid: ",data.val())
+                console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"first phase uid: ",data.val())
                 list.push(uidash.get(data.val()));
-                console.log("kaia",list)
+                console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"kaia",list)
                 collector[session_id][0]["rsend"].push(uidash.get(data.val()));
               }
             }
         })
-        console.log(list,"koioio");
+        console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',list,"koioio");
         if(list.length!=0){
       sendfcmt(list,image_url,subject,grade,session_id,lang,board,chapter,topic,"one",uidstudent);    
     }
@@ -197,18 +202,19 @@ app.post('/sendfcm-i', function(req, res) {
 app.post('/response-i', function(req, res) {
   // name,lang,exp,state,city,rating,uid,nds(no. of doubts solved)
   //create a list
-  console.log(req.body);
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"Collec->>",collector);
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',req.body);
     collector[req.body.uid][0]["acrc"]+=1;
     collector[req.body.uid].push(req.body);
      //think2
-    console.log(collector[req.body.uid]);
-    console.log(or);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',collector[req.body.uid]);
     res.send("res recorded wait 90sec")
   });
   // ********************************** response PHASE-N(1,2,3,4) **************************//
   app.post('/response-i1', function(req, res){
-    console.log(req.body)
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',req.body)
     //need pr of doubt_image,subject,grade,sid,lang,chaoter,topic
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"Collec->>",collector);
     if(collector[req.body.uid][0]["rf"]!="yes")    //rf -request finished 
   {
     collector[req.body.uid][0]["rf"]=="yes"
@@ -224,11 +230,12 @@ app.post('/response-i', function(req, res) {
     var uidstudent = collector[session_id][0]["uidstudent"];
     list = [];
     online = [];
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"Collector->>",collector)
     if(collector[req.body.uid][0]["acrc"]==1){
       res.send("done")
       or--;  //delete request t1 - send request to all the tutors for expiry
       var token_final = request.get(req.body.uid);
-      console.log("uid-3",req.body.uid)
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"uid-3",req.body.uid)
       sendfcms(token_final,req.body.uid,1,1)
       // sendfcmtexpired(collector[req.body.uid][0]["rsend"],image_url,subject,grade,session_id,lang,board,chapter,topic,collector[req.body.uid][0]["phase"]);
     }
@@ -236,7 +243,7 @@ app.post('/response-i', function(req, res) {
       res.send("done")
       or--;  //delete request t1 - send request to all the tutors for expiry
       var token_final = request.get(req.body.uid);
-      console.log("uid-3",req.body.uid)
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"uid-3",req.body.uid)
       sendfcms(token_final,req.body.uid,3,1)
       sendfcmtexpired(collector[req.body.uid][0]["rsend"],image_url,subject,grade,session_id,lang,board,chapter,topic,collector[req.body.uid][0]["phase"]);
       
@@ -248,29 +255,30 @@ app.post('/response-i', function(req, res) {
   
     db.ref("Users").orderByChild("status").equalTo("online").once("value", function(snapshot) {
       snapshot.forEach(function(data) {
-          console.log(data.key)
+          console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data.key)
           online.push(data.key)
       })
   });
   //var request1 = "cbse-12-physics-english".replace(/[.]/g,'')
   var request_tag = board+"-"+grade+"-"+subject+"-"+lang
-  console.log(request_tag,"kokkokokokokok")
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"Collector->",collector)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',request_tag,"kokkokokokokok")
   db.ref("Tags").child(request_tag).once("value", function(snapshot) {
       snapshot.forEach(function(data) {
-         // console.log(data.val(),"online")
-          //console.log(online,list,collector[req.body.uid][0]["rsend"])
+         // console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data.val(),"online")
+          //console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',online,list,collector[req.body.uid][0]["rsend"])
           if((online.includes(data.val()))&&(!list.includes(uidash.get(data.val())))&&
               (!collector[req.body.uid][0]["rsend"].includes(uidash.get(data.val())))){
                 list.push(uidash.get(data.val()));
-                //console.log(list,"one");
+                //console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',list,"one");
                 collector[req.body.uid][0]["rsend"].push(uidash.get(data.val()));
               }
       })
       collector[req.body.uid][0]["phase"]="two";
-      console.log(list,"one");
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',list,"one");
         if(list.length!=0)
         sendfcmt(list,image_url,subject,grade,session_id,lang,board,chapter,topic,"two",uidstudent);
-      //console.log(final)
+      //console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',final)
   });
 
 }
@@ -281,7 +289,7 @@ app.post('/response-i', function(req, res) {
   
         db.ref("Users").orderByChild("status").equalTo("online").once("value", function(snapshot) {
           snapshot.forEach(function(data) {
-              console.log(data.key)
+              console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data.key)
               online.push(data.key)
           })
       });
@@ -290,22 +298,22 @@ app.post('/response-i', function(req, res) {
         var requesti = grade+"-"+subject
         db.ref("Tags").child(requesti+"-"+lang+"-p").once("value", function(snapshot) {
             snapshot.forEach(function(data) {
-                //console.log(data.val())
+                //console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data.val())
                 if((online.includes(data.val()))&&(!list.includes(uidash.get(data.val())))&&
                     (!collector[req.body.uid][0]["rsend"].includes(uidash.get(data.val())))){
                       list.push(uidash.get(data.val()));
                       collector[req.body.uid][0]["rsend"].push(uidash.get(data.val()));
                     }
             })
-            console.log(list,"two-lang");
+            console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',list,"two-lang");
           });
         var request2 = slang.split(" ")
         request2.forEach(function(value){
-          console.log(value);
-          console.log("rsend-twolang",collector[req.body.uid][0]["rsend"])
+          console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',value);
+          console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"rsend-twolang",collector[req.body.uid][0]["rsend"])
           db.ref("Tags").child(requesti+"-"+value).once("value", function(snapshot) {
             snapshot.forEach(function(data) {
-                console.log(data.val())
+                console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data.val())
                 if((online.includes(data.val()))&&(!list.includes(uidash.get(data.val())))&&
                     (!collector[req.body.uid][0]["rsend"].includes(uidash.get(data.val())))){
                       list.push(uidash.get(data.val()));
@@ -316,7 +324,7 @@ app.post('/response-i', function(req, res) {
         });
       });
       collector[req.body.uid][0]["phase"]="three";
-            console.log(list,"two");
+            console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',list,"two");
               if(list.length!=0)
               sendfcmt(list,image_url,subject,grade,session_id,lang,board,chapter,topic,"three",uidstudent);
         
@@ -332,8 +340,8 @@ app.post('/response-i', function(req, res) {
         else{
           res.send("done15")
           or--;
-         console.log("uid-body",request)
-          console.log(collector[req.body.uid][0]["rsend"],"rsend - empty?")
+         console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"uid-body",request)
+          console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',collector[req.body.uid][0]["rsend"],"rsend - empty?")
           sendfcms(request.get(req.body.uid),req.body.uid,collector[req.body.uid][0]["acrc"],0) //show what we got
           sendfcmtexpired(collector[req.body.uid][0]["rsend"],image_url,subject,grade,session_id,lang,board,chapter,topic,collector[req.body.uid][0]["phase"]);
          
@@ -348,11 +356,11 @@ app.post('/response-i', function(req, res) {
   });
   app.post('/response-ilate', function(req, res) {  //for tutor coming online
     
-    console.log(req.body);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',req.body);
       if(collector[req.body.uid]){
         collector[req.body.uid][0]["acrc"]+=1;
        //think2
-      console.log(collector);console.log(or);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',collector);console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',or);
       res.send("res recorded wait 90sec")
       if (collector[req.body.uid][0]["acrc"]==3) {
         activate_student(req.body.uid)
@@ -360,7 +368,7 @@ app.post('/response-i', function(req, res) {
       }
     });
 function sendfcmt(a,image_url,subject,grade,session_id,lang,board,chapter,topic,phase,uidstudent){
-  console.log(a,"jj","lenght ",a.length)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',a,"jj","lenght ",a.length)
   // if(a.length==1)
   // a=a[0];
     //res.send("wait sending to all");
@@ -478,17 +486,17 @@ function sendfcmt(a,image_url,subject,grade,session_id,lang,board,chapter,topic,
   
 // Send a message to the device corresponding to the provided
 // registration token.
-//console.log(message)
+//console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',message)
 if(a.length!=1)
 {
-  console.log("message-a-length ",a.length)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"message-a-length ",a.length)
   otherApp.messaging().sendMulticast(message)
   .then((response) => {
     // Response is a message ID string.
-    console.log('Successfully sent message:', response);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);
   })
   .catch((error) => {
-    console.log('Error sending message:', error);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
   });
 }
 else{
@@ -496,10 +504,10 @@ else{
   otherApp.messaging().send(message1)
   .then((response) => {
     // Response is a message ID string.
-    console.log('Successfully sent message:', response);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);
   })
   .catch((error) => {
-    console.log('Error sending message:', error);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
   });
 }
 }
@@ -510,7 +518,7 @@ function sendfcms_mix(token,uid,i,type,k){
   {   if(k.includes(collector[uid][j]['uidt']))
         uidt_index.push(j)
   }
-  console.log("uid_index: ",uidt_index)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"uid_index: ",uidt_index)
     if (i==3) {
       message = {
        
@@ -695,20 +703,20 @@ function sendfcms_mix(token,uid,i,type,k){
 
   }
     // send tutor
-    console.log("sendfcms final message: ",message)
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"sendfcms final message: ",message)
    defaultApp.messaging().send(message)
   .then((response) => {
    // Response is a message ID string.
-    console.log('Successfully sent message:', response);})
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);})
     .catch((error) => {
-       console.log('Error sending messaget:', error);
+       console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending messaget:', error);
       });
 }
 
 
   function sendfcms(token,uid,i,type)  //t1 sort acc type 
   {
-    console.log("uid-sendfcms",uid)
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"uid-sendfcms",uid)
     var message ;
     if(type==1||type==0){
     if (i==0) {
@@ -910,13 +918,13 @@ function sendfcms_mix(token,uid,i,type,k){
   }
   
     // send tutor
-    console.log("sendfcms final message: ",message)
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"sendfcms final message: ",message)
    defaultApp.messaging().send(message)
   .then((response) => {
    // Response is a message ID string.
-    console.log('Successfully sent message:', response);})
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);})
     .catch((error) => {
-       console.log('Error sending messaget:', error);
+       console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending messaget:', error);
       });
   
 }
@@ -940,9 +948,9 @@ function sendfcms_mix(token,uid,i,type,k){
      defaultApp.messaging().send(message)
   .then((response) => {
    // Response is a message ID string.
-    console.log('Successfully sent message:', response);})
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);})
     .catch((error) => {
-       console.log('Error sending message:', error);
+       console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
       });
   }
   function activate_tutor(session_id){
@@ -973,7 +981,7 @@ function sendfcms_mix(token,uid,i,type,k){
           }
         }
       });
-      console.log(list);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',list);
     })
     var message = {
       notification: {
@@ -1000,14 +1008,14 @@ if(list.length!=0){
   otherApp.messaging().send(message)
   .then((response) => {
     // Response is a message ID string.
-    console.log('Successfully sent message:', response);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);
   })
   .catch((error) => {
-    console.log('Error sending message:', error);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
   });}
 }
 function sendreject(reject){
-  //console.log(a[0],"jj")
+  //console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',a[0],"jj")
       //res.send("wait sending to all");
      
       var message = {
@@ -1050,26 +1058,26 @@ function sendreject(reject){
     otherApp.messaging().send(message)
     .then((response) => {
       // Response is a message ID string.
-      console.log('Successfully sent message:', response);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);
     })
     .catch((error) => {
-      console.log('Error sending message-reject:', error);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message-reject:', error);
     });
   }
   else{
     otherApp.messaging().sendMulticast(message1)
     .then((response) => {
       // Response is a message ID string.
-      console.log('Successfully sent message:', response);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);
     })
     .catch((error) => {
-      console.log('Error sending message-reject:', error);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message-reject:', error);
     });
   }
   
 }
   function sendfcmtexpired(a,image_url,subject,grade,session_id,lang,board,chapter,topic,phase,uidstudent){
-    console.log(a[0],"jj1exp")
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',a[0],"jj1exp")
       //res.send("wait sending to all");
       
       var message = {
@@ -1148,20 +1156,20 @@ function sendreject(reject){
     otherApp.messaging().send(message)
     .then((response) => {
       // Response is a message ID string.
-      console.log('Successfully sent message:', response);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);
     })
     .catch((error) => {
-      console.log('Error sending message:', error);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
     });
   }
   else{
     otherApp.messaging().sendMulticast(message1)
     .then((response) => {
       // Response is a message ID string.
-      console.log('Successfully sent message:', response);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);
     })
     .catch((error) => {
-      console.log('Error sending message:', error);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
     });
   }
   }
@@ -1172,7 +1180,7 @@ function sendreject(reject){
    for (let i = 1; i <=j; i++) {
      reject.push(uidash.get(collector[req.body.uid][i]["uidt"]))
    }
-   console.log("rejected tutors timeout: ",reject)
+   console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"rejected tutors timeout: ",reject)
    res.send("teachers sent back.")
    if(reject.length!=0)
    sendreject(reject)
@@ -1189,7 +1197,7 @@ function sendreject(reject){
      if(collector[req.body.uid][i]["uidt"]!=req.body.uidt)
      reject.push(uidash.get(collector[req.body.uid][i]["uidt"]))
    }
-   console.log("kishan",reject)
+   console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"kishan",reject)
    if(reject.length!=0)
    sendreject(reject)
 
@@ -1215,11 +1223,11 @@ function sendreject(reject){
   
   otherApp.messaging().send(message)
     .then((response) => {
-      console.log('Successfully sent message: final', response);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message: final', response);
       delete collector[req.body.uid];
     })
     .catch((error) => {
-      console.log('Error sending message:', error);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
     });
   })
   app.post('/response-tos', function(req, res) {
@@ -1242,16 +1250,16 @@ function sendreject(reject){
         },
     token: token_final
   };
-  console.log(token_final)
+  console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',token_final)
   // Send a message to the device corresponding to the provided
   // registration token.
   defaultApp.messaging().send(message)
     .then((response) => {
       res.send("connection request send to student")
-      console.log('Successfully sent message:response', response);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:response', response);
     })
     .catch((error) => {
-      console.log('Error sending message:', error);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
     });
   });
 
@@ -1276,9 +1284,9 @@ function student(uidsession){
               
             }
             else if(data.val().rating < 3.6){
-              console.log("rating < 3.6 ")
+              console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"rating < 3.6 ")
               if(l.includes(data.val().uidtutor))
-              console.log("index : ",l.indexOf(data.val().uidtutor)+1)
+              console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"index : ",l.indexOf(data.val().uidtutor)+1)
               //will not work until splice is above delete
               l.splice(l.indexOf(data.val().uidtutor), 1)
               if(collector[key][l.indexOf(data.val().uidtutor)+1]['uidt']==data.val().uidtutor)
@@ -1287,29 +1295,29 @@ function student(uidsession){
              }
           
     })
-    console.log(collector[key])
-    console.log("l= ",l);
-    console.log("f= ",f);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',collector[key])
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"l= ",l);
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"f= ",f);
     sorting(uidsession);
 })
 }
 function sorting(uid){
     if(f.length < 3){
-      console.log("f.length < 3");
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"f.length < 3");
         quicksort(collector[uid], 1, collector[uid][0]["acrc"]);
-      console.log("sorted1: ",collector[uid]);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"sorted1: ",collector[uid]);
   
       if (f.length==1) {
-        console.log("f.length=1");
+        console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"f.length=1");
         if(!f.includes(collector[uid][1]['uidt']))
         f.push(collector[uid][1]['uidt']);
         if(f.length<2){
-          console.log("first tutor selected=")
+          console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"first tutor selected=")
           f.push(collector[uid][2]['uidt']);
         }
       }
       else if (f.length==0) {
-        console.log("f.length=0");
+        console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"f.length=0");
         f.push(collector[uid][1]['uidt']);
         if(collector[uid][2]['rating'] == collector[uid][3]['rating']){
             if(collector[uid][2]['exp'] >= collector[uid][3]['exp'])
@@ -1326,12 +1334,12 @@ function sorting(uid){
           f.push(collector[uid][3]['uidt']);
         }
       }
-      console.log("last ele: ",collector[uid][collector[uid][0]["acrc"]]['uidt'])
-      console.log("last ele f includes:  ",f.includes(collector[uid][collector[uid][0]["acrc"]]['uidt']))
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"last ele: ",collector[uid][collector[uid][0]["acrc"]]['uidt'])
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"last ele f includes:  ",f.includes(collector[uid][collector[uid][0]["acrc"]]['uidt']))
       if(!f.includes(collector[uid][collector[uid][0]["acrc"]]['uidt']))
       f.push(collector[uid][collector[uid][0]["acrc"]]['uidt'])
   
-      console.log("final output f = ",f);
+      console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"final output f = ",f);
 
     }
     sendfcms_mix(request.get(uid),uid,f.length,2,f)
@@ -1345,7 +1353,7 @@ function sorting(uid){
         quicksort(a, l, p-1);
         quicksort(a, p+1, h);
     }
-    console.log("sorted2: ");
+    console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"sorted2: ");
   }
   
   function partition(arr, low, high){
