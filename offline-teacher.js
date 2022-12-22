@@ -6,8 +6,9 @@ var db = otherApp.database();
 db.ref("Users").orderByChild("status").equalTo("online").once("value", function(snapshot) {
     snapshot.forEach(function(data) {
         console.log(data.key)
-       // db.ref("Users").child(`${data.key}`).child("status").set("offline")
-        //online.push(data.key)
+    //    db.ref("Users").child(`${data.key}`).child("status").set("offline")
+    
+        // online.push(data.key)
     })
 });
 

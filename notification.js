@@ -1,5 +1,6 @@
 let uidash = new Map();
 var request = new Map();
+const fetch = require("node-fetch");
 var list =[];
 var online = [];
 var reject = [];
@@ -13,6 +14,7 @@ var express = require('express');
 var app = express()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
+var nodemailer = require('nodemailer');
 var config = require('/var/www/config.json');
 const crypto = require('crypto');
 var admin = require('firebase-admin');
@@ -24,6 +26,15 @@ var db = otherApp.database();
 var sdb = defaultApp.database()
 console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',defaultApp.name)
 const cors = require('cors')
+const transporter = nodemailer.createTransport({
+  port: 465,               // true for 465, false for other ports
+  host: "smtppro.zoho.in",
+     auth: {
+          user: 'founders@doubtconnect.in',
+          pass: 't0sX4c1KmhN4',
+       },
+  secure: true,
+  });
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -129,6 +140,30 @@ app.post('/register-tags', function(request, response){
   response.send("Saved SuccessFully")
 });
 app.post('/sendfcm-i', function(req, res) {
+
+  const data = { messaging_product:"whatsapp",
+  to: "919176371853",
+  type: "template",
+  template: { name: "new_doubt", language: {code: "en_US" } } 
+  }
+
+fetch('https://graph.facebook.com/v13.0/101630129338779/messages', {
+  method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer EAAIXQ94V2MIBAIqGiSM2997sow7F4DNocRnZBGxJabEsDDHwVBZCczpZArAKOGVTZArPShwFKZCsmjodr5RiA95cb6hEZBr9nnJ6zlVZAA0v4d0odbMNPuF1Vbj8lB0XAlFeC6CK5SNwyN2i2R3nIu0wxht0QUdN3QEOku66uKAJYLSgIh0u2tIKY0aHIztSq7Cf8ctZBzPZBOAZDZD'
+
+  },
+  body: JSON.stringify(data),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log('Success jagrit:', data);
+  })
+  .catch((error) => {
+    console.error('Error jagrit:', error);
+  });
+
   online = [];
   list=[];
   var image_url = req.body.url;
@@ -202,6 +237,8 @@ app.post('/sendfcm-i', function(req, res) {
 app.post('/response-i', function(req, res) {
   // name,lang,exp,state,city,rating,uid,nds(no. of doubts solved)
   //create a list
+  
+  console.log ("Accepting doubt");
   console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"Collec->>",collector);
   console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',req.body);
     collector[req.body.uid][0]["acrc"]+=1;
@@ -212,6 +249,9 @@ app.post('/response-i', function(req, res) {
   });
   // ********************************** response PHASE-N(1,2,3,4) **************************//
   app.post('/response-i1', function(req, res){
+
+  //  return res.json({ message: 'Default response' });
+    
     console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',req.body)
     //need pr of doubt_image,subject,grade,sid,lang,chaoter,topic
     console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',"Collec->>",collector);
@@ -334,6 +374,29 @@ app.post('/response-i', function(req, res) {
         // drop board 
         if(collector[req.body.uid][0]["acrc"]==0){
           res.send("no1")
+          //here
+          
+      // EMAIL NOTIFY
+  mailList=["accounts@doubtconnect.in","raghavmishra3830@doubtconnect.in","vaibhav.lal@doubtconnect.in","anushkasharma.as.131@gmail.com","founders@doubtconnect.in"]
+  // mailList=['jagritacharya2019@gmail.com']
+  const mailData = {
+    from: 'founders@doubtconnect.in',  // sender address
+      to: mailList,   // list of receivers
+      subject: 'No Tutor found',
+      text: 'No tutor found',
+      html: `<b>User with details:</b><br/>\n Doubt Image: ${image_url} <br/>,Uuid:${uidstudent} <br/>,grade: ${grade} <br/>,subject: ${subject} <br/> Didnt got response from any tutor`,
+    };
+    transporter.sendMail(mailData, function (err, info) {
+      if(err)
+        {console.log(err)
+        return res.status(400).json({ message: err });
+      }
+      else
+        {
+        console.log(info);
+        return res.json({ message: 'notified' });
+      }
+    });
          // activate_tutor(req.body.uid)
          // sendfcmtexpired(collector[req.body.uid][0]["rsend"],image_url,subject,grade,session_id,lang,board,chapter,topic,collector[req.body.uid][0]["phase"]);
         }
@@ -367,6 +430,32 @@ app.post('/response-i', function(req, res) {
         delete collector[req.body.uid];or--; }
       }
     });
+
+app.get('/notifyRegAdmin',(req,res)=>{
+  // EMAIL NOTIFY
+  mailList=["raghavmishra3830@doubtconnect.in","vaibhav.lal@doubtconnect.in","anushkasharma.as.131@gmail.com"]
+  // mailList=['jagritacharya2019@gmail.com']
+  const mailData = {
+    from: 'founders@doubtconnect.in',  // sender address
+      to: mailList,   // list of receivers
+      subject: 'New Registration',
+      text: 'New User registered',
+      html: `<b>New Registration </b><br/>\n ${req.query.name} is a new student of DoubtConnect<br/>Phone number:${req.query.phno}<br/>Email:${req.query.email}`,
+    };
+    transporter.sendMail(mailData, function (err, info) {
+      if(err)
+        {console.log(err)
+        return res.status(400).json({ message: err });
+      }
+      else
+        {
+        console.log(info);
+        return res.json({ message: 'notified' });
+      }
+    });
+  //  return res.json({ message: 'Default response' });
+});
+
 function sendfcmt(a,image_url,subject,grade,session_id,lang,board,chapter,topic,phase,uidstudent){
   console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',a,"jj","lenght ",a.length)
   // if(a.length==1)
@@ -496,6 +585,7 @@ if(a.length!=1)
     console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Successfully sent message:', response);
   })
   .catch((error) => {
+    
     console.log ( '[' + new Date().toISOString().substring(11,23) + '] -','Error sending message:', error);
   });
 }

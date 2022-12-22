@@ -121,7 +121,7 @@ const checkStatusS = (req, res) => {
   dbStudent
     .ref('Users')
     .orderByChild('status')
-    .equalTo('busy')
+    .equalTo('busy')  
     .once('value', snapshot => {
       res.json(snapshot)
     })
@@ -137,6 +137,13 @@ const getTeacherData = (req, res) => {
 
 const getUnsolvedDoubts = (req, res) => {
 	dbStudent.ref('Sessions/Unsolved')
+		.once('value', snapshot => {
+			res.json(snapshot)
+		})
+}
+const avgDoubts = (req, res) => {
+	dbStudent.ref('Sessions/Solved')
+  .orderByChild('sdate')
 		.once('value', snapshot => {
 			res.json(snapshot)
 		})
@@ -231,6 +238,7 @@ router.get('/signed-students', getStudentsSigned)
 router.get('/signed-teachers', getTeachersSigned)
 router.get('/engadeged-teachers', checkStatusT)
 router.get('/engadeged-student', checkStatusS)
+router.get('/average_duration', avgDoubts)
 router.put('/phase2', putPhase2)
 router.put('/request-edits', putRequestEdits)
 router.get('/online-t', getOnlineTeachers)
