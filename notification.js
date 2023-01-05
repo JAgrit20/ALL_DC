@@ -30,8 +30,8 @@ const transporter = nodemailer.createTransport({
   port: 465,               // true for 465, false for other ports
   host: "smtppro.zoho.in",
      auth: {
-          user: 'founders@doubtconnect.in',
-          pass: 't0sX4c1KmhN4',
+          user: 'accounts@doubtconnect.in',
+          pass: 'tansu@123',
        },
   secure: true,
   });
@@ -91,6 +91,19 @@ app.post('/payment-r', function(request, response){
 });
 
 app.post('/payment-i', function(request, response){
+      // Website you wish to allow to connect
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
+
+      // Request methods you wish to allow
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  
+      // Request headers you wish to allow
+      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  
+      // Set to true if you need the website to include cookies in the requests sent
+      // to the API (e.g. in case you use sessions)
+      res.setHeader('Access-Control-Allow-Credentials', true);
+  
   var data = request.body
   console.log ( '[' + new Date().toISOString().substring(11,23) + '] -',data)
   var signature = request.body.signature
@@ -377,15 +390,16 @@ app.post('/response-i', function(req, res) {
           //here
           
       // EMAIL NOTIFY
-  mailList=["accounts@doubtconnect.in","raghavmishra3830@doubtconnect.in","vaibhav.lal@doubtconnect.in","anushkasharma.as.131@gmail.com","founders@doubtconnect.in"]
+  mailList=["accounts@doubtconnect.in","raghavmishra3830@doubtconnect.in","vaibhav.lal@doubtconnect.in","anushkasharma.as.131@gmail.com","founders@doubtconnect.in","shambhaviupadhyay1902@gmail.com"]
   // mailList=['jagritacharya2019@gmail.com']
   const mailData = {
-    from: 'founders@doubtconnect.in',  // sender address
+    from: 'accounts@doubtconnect.in',  // sender address
       to: mailList,   // list of receivers
       subject: 'No Tutor found',
       text: 'No tutor found',
       html: `<b>User with details:</b><br/>\n Doubt Image: ${image_url} <br/>,Uuid:${uidstudent} <br/>,grade: ${grade} <br/>,subject: ${subject} <br/> Didnt got response from any tutor`,
     };
+    console.log("sending mail now jagrit")
     transporter.sendMail(mailData, function (err, info) {
       if(err)
         {console.log(err)
@@ -432,16 +446,18 @@ app.post('/response-i', function(req, res) {
     });
 
 app.get('/notifyRegAdmin',(req,res)=>{
+  console.log("new student jagrit",req.query);
   // EMAIL NOTIFY
-  mailList=["raghavmishra3830@doubtconnect.in","vaibhav.lal@doubtconnect.in","anushkasharma.as.131@gmail.com"]
+  mailList=["raghavmishra3830@doubtconnect.in","vaibhav.lal@doubtconnect.in","anushkasharma.as.131@gmail.com","shambhaviupadhyay1902@gmail.com"]
   // mailList=['jagritacharya2019@gmail.com']
   const mailData = {
-    from: 'founders@doubtconnect.in',  // sender address
-      to: mailList,   // list of receivers
+    from: 'accounts@doubtconnect.in',  // sender address
+      to: mailList,   // list of receivers.
       subject: 'New Registration',
       text: 'New User registered',
-      html: `<b>New Registration </b><br/>\n ${req.query.name} is a new student of DoubtConnect<br/>Phone number:${req.query.phno}<br/>Email:${req.query.email}`,
+      html: `<b>New Registration </b><br/>\n ${req.query.name} is a new student of DoubtConnect<br/>Phone number:${req.query.phno}<br/>Email:${req.query.email}<br/>grade:${req.query.grade}<br/>board:${req.query.board}<br/>language:${req.query.language}`,
     };
+    console.log("sending mail now jagrit")
     transporter.sendMail(mailData, function (err, info) {
       if(err)
         {console.log(err)
