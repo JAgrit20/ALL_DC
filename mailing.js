@@ -56,6 +56,10 @@ app.get('/notifyRegAdmin',(req,res)=>{
       });
     //  return res.json({ message: 'Default response' });
   });
+// Start the server
+app.listen(3003, () => {
+    console.log('Server listening on port 3000');
+  });
 
-  var httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(3001);
+
+  
