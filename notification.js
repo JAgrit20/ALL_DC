@@ -15,7 +15,7 @@ var app = express()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 var nodemailer = require('nodemailer');
-var config = require('/var/www/config.json');
+var config = require('/var/www/html/test_config.json');
 const crypto = require('crypto');
 var admin = require('firebase-admin');
 var defaultAppConfig = {credential: admin.credential.cert(require("/var/www/html/student_config.json")), databaseURL: "https://doubtconnect-a1cf3.firebaseio.com/"}
