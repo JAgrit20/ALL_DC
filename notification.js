@@ -8,7 +8,7 @@ var collector={};var or=0;
 var uniqid = require('uniqid');
 var fs = require('fs');
 var https = require('https');
-var credentials = {key: fs.readFileSync('privkey_dcwebsite.pem'), cert:  fs.readFileSync('fullchain_dcwebsite.pem')};
+var credentials = {key: fs.readFileSync('/var/www/html/privkey_dcwebsite.pem'), cert:  fs.readFileSync('/var/www/html/fullchain_dcwebsite.pem')};
 
 var express = require('express');
 var app = express()
