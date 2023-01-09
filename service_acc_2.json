@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "doubtconnect-teachers",
+    "private_key_id": "b1559bb6e3a265021467da4141f119e0ee8a0381",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCmHzYA/fltpzm8\nu5KvFxr/Nhg11Mnw+eZCl9nRw0uqqmOkmG5m4ORyy60GJWldjZ3lNxlhpsKrKU9r\n/wXmRwYABIKv0L1EwtHqvM09bM47c9hqQouYIlQV3e1Ckea6T/3hbXLAr8nx+pnQ\nl32OrybSo1eQp3lDJzFGGHMiY7EBI8NdKp5h8WPgVzM9a/ZpKd9CefGN+zoBFDZh\ns5s3O0Y4h19a6z8jcPhrtvpKVdx2R8zyUMKQ81OO5reHBRc+XVk2m4FCP6AnCGGR\n75lE5sTeS0eS8SrXERKK7tENGMuHOlAuA5ZIAsghbgr2BepuigQfHN1pd1WcXdMl\n6oFlHVWnAgMBAAECggEAAsIQ/Y9od2Mk7RPkLJFLXbmN7HBVK87KWoiCV2Q5rxy0\njqF8h2WmebND0A7D3SqWqhF9qwaRIQaMpgWOMIUGoL/Pg0p+BCX4RPqhUEIJkW6U\nreWCN6J/XUJOGX97ixn8tbtYpNkR9BZFJX9aBvK0PGXHIwqDU7aNUsnKCntO4O7B\nuUU/SOB4QKwAU5R87yDB1YxoumD4+Qp5jvwWgOVAxFfQmpU/P5pOTZWtc4AV4pNw\n6jghddUFrIrpsO2MaIloRdc+zYnL7c4CCqbxX9OigQmoluAwIfNfaSMxRf2+bjhN\nWr2iTcLkQ2MeKDAUeIzRkFkh8x34KkqN6NILXXSSYQKBgQDn8xa3JWseSkyoJ1qf\n+AtdXmPWxV/gg9DgICvhjLx2SWitcGKk2FQQwpNcmvhbtrtdPeRWAAnvd1h6++nq\nIn66q00BXrwL6IEmTa3cDJ8tfryZcseS6xlmIczAo2LV59nZOh7vqjYRY9oMB/NH\nbRaiVWsRkXDCqOirLAqLMbCQVwKBgQC3WMf+LbebMVOmXp5hogWetwyFioseU0dj\nWDiZ1/tlBaIu4bFCYP3JCV71+mCI9J9bUNlTGdsyvnZgQcs7a06ykdYqaBxKZdAC\nn8LFMBXvSxJUQOAOuV8b9eC1+0cGSvRskbNs3Bn2sOP9S/Sqg7mCfps/LTFT24aP\n4RMvvzbTMQKBgDmCOvqTy3hKIbF7eGu7O04eDhD9BOWMqSg4sciNdVi6oLqH591J\nSaaSJ6lJPxS2PMREiS2NeuklpQlxFjEX9mXf/Qq+607kicjub5Hkiz7jcm11WOgj\nZDu/W53TpLi2cHv8fhkcEaXEJRbgjcAC2x7KoO5NKjEJYg62r7KNUmKnAoGAc7Y7\nWeZedzp1UY1rpbCMnXNnGqyqSjRC3Kbj6ewOg94/UhksNvlhkcwxO0qOPEEuhYIL\n9k9eMLNVoEBF1DVQEJDLui3ElQuWcOGFGc/UOBaH9daP0ZsaNFpEPHXeiFEr241E\n0NJELJXM/aI/QpIptPrUXdXWyNbGIO3qnvqtzjECgYBzuOONZbYeQmG2PA5LJTps\np6+I5ulsygdKvDmHvHFAQUHH5v5vV2PzykMB5KD+TqB8idP3IAdI77LZpTwwQtOi\nLXvLewFiqG7NgGA2YwlT/VUu+3LJZL5UYyEulJ63fpQPn69OlYnFApVmjO8lofUr\nZ0pQ3D8yfV0Vkut+7FjGSw==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-s0xam@doubtconnect-teachers.iam.gserviceaccount.com",
+    "client_id": "108579966793410480272",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-s0xam%40doubtconnect-teachers.iam.gserviceaccount.com"
+  }
